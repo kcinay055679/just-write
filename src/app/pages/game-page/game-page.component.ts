@@ -23,6 +23,7 @@ export class GamePageComponent {
     path: 'assets/animations/animation.json',
     animationEvents: this.subject,
     animationAmount: 10,
+    animationDelay: 100,
     cssProperty: 'padding-left',
     moveMax: 1000
   }
