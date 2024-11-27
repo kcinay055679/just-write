@@ -97,7 +97,12 @@
           }
         },
         "deploy": {
-          "builder": "angular-cli-ghpages:deploy"
+          "builder": "angular-cli-ghpages:deploy",
+          "options": {
+            "baseHref": "https://kcinay055679.github.io/just-write/just-write/",
+            "name": "Yanick Minder",
+            "email": "minder@puzzle.ch"
+          }
         }
       }
     }
