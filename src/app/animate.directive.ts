@@ -9,6 +9,7 @@ export interface AnimationConfig {
     animationDelay:number
     cssProperty: string;
     moveMax: number;
+    animationSpeed: number;
 }
 
 @Directive({
@@ -17,7 +18,6 @@ export interface AnimationConfig {
 export class AnimateDirective implements AfterContentInit, OnDestroy {
     // config
     @Input() config!: AnimationConfig;
-    animationSpeed: number = 1;
     currentPadding: number = 0;
     destroy: Subject<void> = new Subject();
     animationQueue: Subject<AnimationEvent> = new Subject();
@@ -52,10 +52,10 @@ export class AnimateDirective implements AfterContentInit, OnDestroy {
     setPadding(event: AnimationEvent) {
         switch (event) {
             case AnimationEvent.FORWARD:
-                this.currentPadding += this.animationSpeed;
+                this.currentPadding += this.config.animationSpeed;
                 break;
             case AnimationEvent.BACKWARD:
-                this.currentPadding -= this.animationSpeed;
+                this.currentPadding -= this.config.animationSpeed;
                 break;
         }
 
