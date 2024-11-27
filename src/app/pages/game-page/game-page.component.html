@@ -1,4 +1,18 @@
 <app-points-counter></app-points-counter>
-<img src="green-bullet.png" [appAnimate]="config">
+<div class="container-fluid">
+    <div class="row">
+        <span class="">
+            <img src="green-bullet.png" [appAnimate]="config">
+        </span>
+    </div>
+
+    <div class="row row-cols-auto">
+        <button (click)="left()">left</button>
+        <button (click)="right()">reight</button>
+    </div>
+
+
+
+</div>
 
 <app-text-field></app-text-field>

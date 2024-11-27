@@ -1,35 +1,61 @@
-import {Directive, ElementRef, EventEmitter, Input, Renderer2} from '@angular/core';
+import {AfterContentChecked, AfterContentInit, Directive, ElementRef, Input, OnDestroy, Renderer2} from '@angular/core';
 import {AnimationEvent} from "./enums/AnimationEvent";
+import {delay, last, Subject, switchMap, takeUntil, tap} from "rxjs";
 
-export interface AnimationConfig{
-    path:string;
-    events:EventEmitter<AnimationEvent>;
+export interface AnimationConfig {
+    path: string;
+    animationEvents: Subject<AnimationEvent>;
+    animationAmount: number;
+    cssProperty: string;
+    moveMax: number;
 }
 
 @Directive({
-  selector: '[appAnimate]'
+    selector: '[appAnimate]'
 })
-export class AnimateDirective {
+export class AnimateDirective implements AfterContentInit, OnDestroy {
+    // config
+    @Input() appAnimate!: AnimationConfig;
+    animationSpeed: number = 1;
+    private currentPadding: number = 0;
+    private destroy: Subject<void> = new Subject();
 
-  @Input() config!: AnimationConfig;
-  constructor(private elementRef:ElementRef, private renderer:Renderer2) {
-    this.config.events.subscribe((event:AnimationEvent) => {
-      switch(event){
-        case AnimationEvent.FORWARD:
-          this.animateForward();
-          break;
-        case AnimationEvent.BACKWARD:
-          this.animateBackward();
-          break;
-      }
-    });
-  }
+    constructor(private elementRef: ElementRef, private renderer: Renderer2) {
+    }
 
-  private animateBackward() {
+    ngAfterContentInit(): void {
+        this.appAnimate.animationEvents
+            .pipe(takeUntil(this.destroy))
+            .subscribe((event) => this.animate(event));
+    }
 
-  }
+    ngOnDestroy(): void {
+        this.destroy.next()
+    }
 
-  private animateForward() {
+    private animate(event: AnimationEvent) {
+        for (let i = 0; i < this.appAnimate.animationAmount; i++) {
+            this.setPadding(event)
+            this.applyPadding()
+        }
+    }
 
-  }
+    private setPadding(event: AnimationEvent) {
+        switch (event) {
+            case AnimationEvent.FORWARD:
+                this.currentPadding += this.animationSpeed;
+                break;
+            case AnimationEvent.BACKWARD:
+                this.currentPadding -= this.animationSpeed;
+                break;
+        }
+
+        if (this.currentPadding >= this.appAnimate.moveMax) {
+            this.currentPadding = 0;
+        }
+    }
+
+    private applyPadding() {
+        this.renderer.setStyle(this.elementRef.nativeElement, this.appAnimate.cssProperty, `${this.currentPadding}px`);
+    }
 }
