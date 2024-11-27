@@ -16,7 +16,7 @@ export interface AnimationConfig {
 })
 export class AnimateDirective implements AfterContentInit, OnDestroy {
     // config
-    @Input() appAnimate!: AnimationConfig;
+    @Input() config!: AnimationConfig;
     animationSpeed: number = 1;
     currentPadding: number = 0;
     destroy: Subject<void> = new Subject();
@@ -27,10 +27,10 @@ export class AnimateDirective implements AfterContentInit, OnDestroy {
     }
 
     ngAfterContentInit(): void {
-        this.appAnimate.animationEvents.pipe(takeUntil(this.destroy)).subscribe((event) => this.animationHandler(event));
+        this.config.animationEvents.pipe(takeUntil(this.destroy)).subscribe((event) => this.animationHandler(event));
         this.animationQueue.pipe(
             takeUntil(this.destroy),
-            concatMap( item => of(item).pipe(delay(this.appAnimate.animationDelay)))
+            concatMap( item => of(item).pipe(delay(this.config.animationDelay)))
         ).subscribe(e=>this.animate(e));
     }
 
@@ -39,7 +39,7 @@ export class AnimateDirective implements AfterContentInit, OnDestroy {
     }
 
     animationHandler(event: AnimationEvent) {
-        for (let i = 0; i < this.appAnimate.animationAmount; i++) {
+        for (let i = 0; i < this.config.animationAmount; i++) {
             this.animationQueue.next(event);
         }
     }
@@ -59,12 +59,12 @@ export class AnimateDirective implements AfterContentInit, OnDestroy {
                 break;
         }
 
-        if (this.currentPadding >= this.appAnimate.moveMax) {
+        if (this.currentPadding >= this.config.moveMax) {
             this.currentPadding = 0;
         }
     }
 
     applyPadding() {
-        this.renderer.setStyle(this.elementRef.nativeElement, this.appAnimate.cssProperty, `${this.currentPadding}px`);
+        this.renderer.setStyle(this.elementRef.nativeElement, this.config.cssProperty, `${this.currentPadding}px`);
     }
 }
