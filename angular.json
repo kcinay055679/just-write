@@ -104,7 +104,7 @@
         "deploy": {
           "builder": "angular-cli-ghpages:deploy",
           "options": {
-            "baseHref": "https://kcinay055679.github.io/just-write",
+            "baseHref": "/just-write/",
             "repo": "git@github.com:kcinay055679/just-write.git",
             "name": "kcinay055679",
             "username": "kcinay055679",
