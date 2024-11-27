@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, ReactiveFormsModule} from "@angular/forms";
-import {distinctUntilChanged, map, tap} from "rxjs";
+import {distinctUntilChanged, map, pairwise, tap} from "rxjs";
+import {GameService} from "../../services/game.service";
 
 @Component({
   selector: 'app-text-field',
@@ -13,12 +14,13 @@ import {distinctUntilChanged, map, tap} from "rxjs";
 export class TextFieldComponent implements OnInit{
   text = new FormControl('');
 
+  constructor(private gameService: GameService) {
+  }
   ngOnInit(): void {
     this.text.valueChanges.pipe(
         map(e => e || ""),
         distinctUntilChanged(),
-        tap(e=>console.log(e)
-        )
-    ).subscribe()
+        pairwise()
+    ).subscribe(([old, next]:[string, string])=>this.gameService.textSubject.next([old, next]));
   }
 }
