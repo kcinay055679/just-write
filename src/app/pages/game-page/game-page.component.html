@@ -1,5 +1,4 @@
-<app-points-counter></app-points-counter>
-
+<app-points-counter [progressBarConfig]="progressBarConfig"></app-points-counter>
 
 <div class="container-fluid">
     <div class="row">
@@ -10,13 +9,13 @@
     </div>
     <div class="row">
         <span class="">
-            <img src="green-bullet.png" appAnimate [config]="config">
+            <img src="green-bullet.png" appAnimate [config]="config" alt="test">
         </span>
     </div>
 
     <div class="row row-cols-auto">
-        <button (click)="next()">left</button>
-        <button (click)="back()">reight</button>
+        <button (click)="backward()">Left</button>
+        <button (click)="forward()">Right</button>
     </div>
 </div>
 

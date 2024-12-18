@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {AfterContentInit, Component, Input} from '@angular/core';
 import {MatProgressBar} from "@angular/material/progress-bar";
 import {Subject} from "rxjs";
 
@@ -7,7 +7,7 @@ export interface ProgressBarConfig {
   min: number;
   max: number;
   fillColor: string;
-  backgroundColor: string;
+  updateSubject: Subject<number>;
 }
 
 @Component({
@@ -18,17 +18,14 @@ export interface ProgressBarConfig {
   templateUrl: './points-counter.component.html',
   styleUrl: './points-counter.component.scss'
 })
-export class PointsCounterComponent {
-  @Input()
-  updateProgress: Subject<number> = new Subject();
-
+export class PointsCounterComponent implements AfterContentInit{
   @Input()
   progressBarConfig!: ProgressBarConfig;
 
   currentProgress: number = 0;
 
-  constructor() {
-    this.updateProgress.subscribe((v) => {
+  ngAfterContentInit() {
+    this.progressBarConfig.updateSubject.subscribe((v) => {
       this.currentProgress += v;
     });
   }
