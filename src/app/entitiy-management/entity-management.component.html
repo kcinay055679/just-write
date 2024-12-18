@@ -1,9 +1,11 @@
-<div class="row">
-        <span class="">
-
-            <img src="karen.gif" appAnimate [config]="config" alt="test">
-            <img src="green-bullet.png" appAnimate [config]="config" alt="test">
-            <img src="quin.gif" appAnimate [config]="config" alt="test">
-
-        </span>
+<div class="row gx-0">
+    <div class="col-auto">
+        <img alt="test" src="karen.gif">
+    </div>
+    <div class="col">
+        <img [config]="config" alt="test" appAnimate src="green-bullet.png">
+    </div>
+    <div class="col-auto">
+        <img alt="test" src="quin.gif">
+    </div>
 </div>

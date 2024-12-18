@@ -1,7 +1,6 @@
-import {AfterContentInit, Component, Input} from '@angular/core';
+import {AfterContentInit, Component} from '@angular/core';
 import {AnimateDirective, AnimationConfig} from "../animate.directive";
-import {Subject} from "rxjs";
-import {AnimationEvent} from "../enums/AnimationEvent";
+import {GameService} from "../services/game.service";
 
 @Component({
   selector: 'app-entity-management',
@@ -12,20 +11,21 @@ import {AnimationEvent} from "../enums/AnimationEvent";
   styleUrl: './entity-management.component.scss'
 })
 export class EntityManagementComponent implements AfterContentInit {
-  @Input()
-  updateAnimation: Subject<AnimationEvent> = new Subject();
+  config:AnimationConfig;
 
-  config: AnimationConfig = {
-    path: 'assets/animations/animation.json',
-    animationEvents: this.updateAnimation,
-    animationAmount: 10,
-    animationDelay: 10,
-    animationSpeed: 1,
-    cssProperty: 'padding-left',
-    moveMax: 1000
+  constructor(private readonly gameService: GameService) {
+    this.config = {
+      path: 'assets/animations/animation.json',
+      animationEvents:  this.gameService.eventsSubject,
+      animationAmount: 10,
+      animationDelay: 10,
+      animationSpeed: 1,
+      cssProperty: 'padding-left',
+      moveMax: 1000
+    }
   }
 
   ngAfterContentInit(): void {
-    this.updateAnimation.subscribe((event) => console.log(event));
+    this.gameService.eventsSubject.subscribe((event) => console.log("test", event));
   }
 }

@@ -17,7 +17,6 @@ export class GamePageComponent {
     startBlockLife = 200;
     wordCount = 0;
     lifePoints = new PointsHandler(20, 1);
-    events: Subject<AnimationEvent> = new Subject();
 
     progressBarConfig: ProgressBarConfig = {
         pointsHandler: this.lifePoints,
@@ -29,11 +28,11 @@ export class GamePageComponent {
     }
 
     backward() {
-        this.events.next(AnimationEvent.BACKWARD);
+        this.gameService.eventsSubject.next(AnimationEvent.BACKWARD);
     }
 
     forward() {
-        this.events.next(AnimationEvent.FORWARD);
+        this.gameService.eventsSubject.next(AnimationEvent.FORWARD);
     }
 
     handleTextInput(old: string, next: string) {
