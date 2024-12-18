@@ -1,13 +1,10 @@
-import {AfterContentInit, Component, Input} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {MatProgressBar} from "@angular/material/progress-bar";
-import {Subject} from "rxjs";
+import {PointsHandler} from "../../points-handler";
 
 export interface ProgressBarConfig {
-  initialValue: number;
-  min: number;
-  max: number;
+  pointsHandler: PointsHandler;
   fillColor: string;
-  updateSubject: Subject<number>;
 }
 
 @Component({
@@ -18,15 +15,7 @@ export interface ProgressBarConfig {
   templateUrl: './points-counter.component.html',
   styleUrl: './points-counter.component.scss'
 })
-export class PointsCounterComponent implements AfterContentInit{
+export class PointsCounterComponent{
   @Input()
   progressBarConfig!: ProgressBarConfig;
-
-  currentProgress: number = 0;
-
-  ngAfterContentInit() {
-    this.progressBarConfig.updateSubject.subscribe((v) => {
-      this.currentProgress += v;
-    });
-  }
 }

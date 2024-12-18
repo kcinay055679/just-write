@@ -1,17 +1,14 @@
 <app-points-counter [progressBarConfig]="progressBarConfig"></app-points-counter>
 
 <div class="container-fluid">
+    <app-entity-management> </app-entity-management>
     <div class="row">
         Start block life: {{startBlockLife}}
     </div>
     <div class="row">
-        currentBlockLife: {{currentBlockLife}}
+        currentBlockLife: {{wordCount}}
     </div>
-    <div class="row">
-        <span class="">
-            <img src="green-bullet.png" appAnimate [config]="config" alt="test">
-        </span>
-    </div>
+
 
     <div class="row row-cols-auto">
         <button (click)="backward()">Left</button>

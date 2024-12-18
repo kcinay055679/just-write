@@ -2,53 +2,38 @@ import {Component} from '@angular/core';
 import {TextFieldComponent} from "../../components/text-field/text-field.component";
 import {PointsCounterComponent, ProgressBarConfig} from "../../components/points-counter/points-counter.component";
 import {AnimationEvent} from "../../enums/AnimationEvent";
-import {AnimateDirective, AnimationConfig} from "../../animate.directive";
 import {Subject} from "rxjs";
 import {GameService} from "../../services/game.service";
-import {NgOptimizedImage} from "@angular/common";
 import {PointsHandler} from "../../points-handler";
+import {EntityManagementComponent} from "../../entitiy-management/entity-management.component";
 
 @Component({
     selector: 'app-game-page',
-    imports: [TextFieldComponent, PointsCounterComponent, AnimateDirective, NgOptimizedImage],
+    imports: [TextFieldComponent, PointsCounterComponent, EntityManagementComponent],
     templateUrl: './game-page.component.html',
     styleUrl: './game-page.component.scss'
 })
 export class GamePageComponent {
     startBlockLife = 200;
-    currentBlockLife = 0;
+    wordCount = 0;
     lifePoints = new PointsHandler(20, 1);
-
-
-    config: AnimationConfig = {
-        path: 'assets/animations/animation.json',
-        animationEvents: new Subject<AnimationEvent>(),
-        animationAmount: 10,
-        animationDelay: 10,
-        animationSpeed: 1,
-        cssProperty: 'padding-left',
-        moveMax: 1000
-    }
+    events: Subject<AnimationEvent> = new Subject();
 
     progressBarConfig: ProgressBarConfig = {
-        initialValue: 0,
-        min: 0,
-        max: 100,
+        pointsHandler: this.lifePoints,
         fillColor: 'primary',
-        updateSubject: new Subject<number>()
     }
 
     constructor(private readonly gameService: GameService) {
-        this.gameService.textSubject.subscribe(([old, next]: [string, string]) => this.handleTextInput(old, next));
+        this.gameService.textSubject.subscribe(([old, next]: [string, string]) => this.handleTextInput(this.formatText(old), this.formatText(next)));
     }
 
     backward() {
-        this.config.animationEvents.next(AnimationEvent.BACKWARD);
-
+        this.events.next(AnimationEvent.BACKWARD);
     }
 
     forward() {
-        this.config.animationEvents.next(AnimationEvent.FORWARD);
+        this.events.next(AnimationEvent.FORWARD);
     }
 
     handleTextInput(old: string, next: string) {
@@ -58,6 +43,10 @@ export class GamePageComponent {
             this.forward();
         }
         const wordBlocks = next.split(' ');
-        this.currentBlockLife = this.startBlockLife - wordBlocks.length+1;
+        this.wordCount = wordBlocks.length;
+    }
+
+    formatText(text:string){
+        return text.replace(/\s\s+/g, ' ').trim();
     }
 }
