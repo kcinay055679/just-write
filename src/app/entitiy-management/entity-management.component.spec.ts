@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {EntityManagementComponent} from "./entity-management.component";
 
-import { EntitiyManagementComponent } from './entitiy-management.component';
 
 describe('EntitiyManagementComponent', () => {
-  let component: EntitiyManagementComponent;
-  let fixture: ComponentFixture<EntitiyManagementComponent>;
+  let component: EntityManagementComponent;
+  let fixture: ComponentFixture<EntityManagementComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [EntitiyManagementComponent]
+      imports: [EntityManagementComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(EntitiyManagementComponent);
+    fixture = TestBed.createComponent(EntityManagementComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
